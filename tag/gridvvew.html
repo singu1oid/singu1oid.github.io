@@ -2,7 +2,7 @@
 <html lang="cn">
 <head>
         <meta charset="utf-8" />
-        <title>Singuloid Research（泰一奇点研究院）</title>
+        <title>Singuloid Research（泰一奇点研究院） - GridvVew</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -663,103 +663,11 @@
 <span class="c">&lt;!-- 震动权限 --&gt;</span>  
 <span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">&quot;android.permission.VIBRATE&quot;</span><span class="nt">/&gt;</span>
 </pre></div>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <hr />
-                    <ol id="posts-list" class="hfeed">
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/cha-ru-pai-xu-he-shellpai-xu.html" rel="bookmark"
-                           title="Permalink to 插入排序和Shell排序">插入排序和Shell排序</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2014-04-15T10:20:00">
-                二 15 四月 2014
-        </abbr>
-
-        <address class="vcard author">
-                By <a class="url fn" href="/author/rong-chen.html">Rong Chen</a>
-        </address>
-<p>In <a href="/category/algorithm.html">Algorithm</a>. </p>
-<p>tags: <a href="/tag/sort.html">sort</a><a href="/tag/shell.html">shell</a><a href="/tag/insertion.html">insertion</a></p>
-</footer><!-- /.post-info -->                <p>插入排序的算法在打扑克牌时经常使用，算法比较简单，但是它和冒泡法一样，涉及相邻元素的交换，我们在评价算法效率时往往只看到循环，而忽略循环里的内容，今天这篇文章就说这个。</p>
-<p>插入排序的算法如下：</p>
-<div class="highlight"><pre><span class="kt">void</span> <span class="nf">insertion_sort</span><span class="p">(</span><span class="kt">int</span> <span class="n">b</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span> <span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span> <span class="n">j</span> <span class="o">--</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">exch</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>试想如果数组中最后一个元素就是最小值，那么它要移动n-1次才能到达正确的位置。</p>
-<p>Shell排序是基于插入排序开发出来的，名字来源于作者，就是为了解决插入排序中类似上述情况中移动次数过多的问题，算法比插入排序复杂多了，代码如下：</p>
-<div class="highlight"><pre><span class="kt">void</span> <span class="nf">shell_sort</span><span class="p">(</span><span class="kt">int</span> <span class="n">b</span><span class="p">[],</span> <span class="kt">int ...</span></pre></div>
-                <a class="readmore" href="/cha-ru-pai-xu-he-shellpai-xu.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="/seldao-di-shi-shi-yao-lei-xing.html" rel="bookmark"
-                           title="Permalink to SEL到底是什么类型？">SEL到底是什么类型？</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2014-03-13T20:13:00">
-                四 13 三月 2014
-        </abbr>
-
-        <address class="vcard author">
-                By <a class="url fn" href="/author/rong-chen.html">Rong Chen</a>
-        </address>
-<p>In <a href="/category/ios.html">iOS</a>. </p>
-<p>tags: <a href="/tag/objc.html">objc</a><a href="/tag/sel.html">SEL</a><a href="/tag/ios.html">iOS</a></p>
-</footer><!-- /.post-info -->                <p>前几天看到书上说SEL其实本质是一个字符串，用于查找函数实现，同时为了加速函数的查找，会把此字符串变为一个整数，它说的对不对，今天有空来验证一下。</p>
-<p>Objective-C中的SEL类型的使用方法如下：</p>
-<div class="highlight"><pre><span class="kt">SEL</span> <span class="n">sel</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">foo</span><span class="o">:</span><span class="p">);</span>
-</pre></div>
-
-
-<p>或者</p>
-<div class="highlight"><pre><span class="kt">SEL</span> <span class="n">sel</span> <span class="o">=</span> <span class="n">NSSelectorFromString</span><span class="p">(</span><span class="s">@&quot;foo:&quot;</span><span class="p">);</span>
-</pre></div>
-
-
-<p>第一种写法蛮怪的，"foo:"到底是什么？是字符串吗？
-我们找到它的定义：</p>
-<div class="highlight"><pre><span class="k">typedef</span> <span class="k">struct</span> <span class="n">objc_selector</span> <span class="o">*</span><span class="kt">SEL</span><span class="p">;</span>  <span class="p">(</span><span class="o">*</span><span class="err">*/</span><span class="n">usr</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">objc</span><span class="o">/</span><span class="n">objc</span><span class="p">.</span><span class="n">h</span><span class="p">)</span>
-</pre></div>
-
-
-<p>objc_selector是什么，我也没找到它的定义，那我们从汇编代码中找答案吧！</p>
-<p>首先写点代码：</p>
-<div class="highlight"><pre><span class="cm">/* test.m */</span>
-<span class="cp">#import &lt;Foundation/Foundation.h&gt;</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kt">SEL</span> <span class="n">sel</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">foo</span><span class="o">:</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>看看生成的代码：</p>
-<div class="highlight"><pre>a.out:
-<span class="o">(</span>__TEXT ...</pre></div>
-                <a class="readmore" href="/seldao-di-shi-shi-yao-lei-xing.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-            </ol><!-- /#posts-list -->
 <p class="paginator">
     Page 1 / 1
 </p>
+            </aside><!-- /#featured -->
+            </ol><!-- /#posts-list -->
             </section><!-- /#content -->
         <section id="extras" class="body">
                 <div class="blogroll">
