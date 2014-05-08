@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+        <meta charset="utf-8" />
+        <title>Singuloid Research（泰一奇点研究院） - Obj-C</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Singuloid Research（泰一奇点研究院） </a></h1>
+                <nav><ul>
+                    <li><a href="/pages/gong-zuo-ji-hui.html">工作机会</a></li>
+                    <li><a href="/category/algorithm.html">Algorithm</a></li>
+                    <li class="active"><a href="/category/obj-c.html">Obj-C</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/seldao-di-shi-shi-yao-lei-xing.html">SEL到底是什么类型？</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2014-03-13T20:13:00">
+                四 13 三月 2014
+        </abbr>
+
+        <address class="vcard author">
+                By <a class="url fn" href="/author/rong-chen.html">Rong Chen</a>
+        </address>
+<p>In <a href="/category/obj-c.html">Obj-C</a>. </p>
+<p>tags: <a href="/tag/objc.html">objc</a><a href="/tag/sel.html">SEL</a><a href="/tag/ios.html">iOS</a></p>
+</footer><!-- /.post-info --><p>前几天看到书上说SEL其实本质是一个字符串，用于查找函数实现，同时为了加速函数的查找，会把此字符串变为一个整数，它说的对不对，今天有空来验证一下。</p>
+<p>Objective-C中的SEL类型的使用方法如下：</p>
+<div class="highlight"><pre><span class="kt">SEL</span> <span class="n">sel</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">foo</span><span class="o">:</span><span class="p">);</span>
+</pre></div>
+
+
+<p>或者</p>
+<div class="highlight"><pre><span class="kt">SEL</span> <span class="n">sel</span> <span class="o">=</span> <span class="n">NSSelectorFromString</span><span class="p">(</span><span class="s">@&quot;foo:&quot;</span><span class="p">);</span>
+</pre></div>
+
+
+<p>第一种写法蛮怪的，"foo:"到底是什么？是字符串吗？
+我们找到它的定义：</p>
+<div class="highlight"><pre><span class="k">typedef</span> <span class="k">struct</span> <span class="n">objc_selector</span> <span class="o">*</span><span class="kt">SEL</span><span class="p">;</span>  <span class="p">(</span><span class="o">*</span><span class="err">*/</span><span class="n">usr</span><span class="o">/</span><span class="n">include</span><span class="o">/</span><span class="n">objc</span><span class="o">/</span><span class="n">objc</span><span class="p">.</span><span class="n">h</span><span class="p">)</span>
+</pre></div>
+
+
+<p>objc_selector是什么，我也没找到它的定义，那我们从汇编代码中找答案吧！</p>
+<p>首先写点代码：</p>
+<div class="highlight"><pre><span class="cm">/* test.m */</span>
+<span class="cp">#import &lt;Foundation/Foundation.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">SEL</span> <span class="n">sel</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">foo</span><span class="o">:</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>看看生成的代码：</p>
+<div class="highlight"><pre>a.out:
+<span class="o">(</span>__TEXT,__text<span class="o">)</span> section
+_main:
+0000bfe0      b081  sub sp, <span class="c">#0x4</span>
+0000bfe2      2000  movs  r0, <span class="c">#0x0</span>
+0000bfe4  f2c00000  movt  r0, <span class="c">#0x0</span>
+0000bfe8  f2400114  movw  r1, <span class="c">#0x14</span>
+0000bfec  f2c00100  movt  r1, <span class="c">#0x0</span>
+0000bff0      4479  add r1, pc
+0000bff2      6809  ldr r1, <span class="o">[</span>r1<span class="o">]</span>
+0000bff4      9100  str r1, <span class="o">[</span>sp<span class="o">]</span>
+0000bff6      b001  add sp, <span class="c">#0x4</span>
+0000bff8      4770  bx  lr
+</pre></div>
+
+
+<p>代换运行完后，r1存放的就是SEL类型，我们看看它的内容</p>
+<div class="highlight"><pre><span class="p">[</span><span class="n">r1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0xbff4</span> <span class="o">+</span> <span class="mh">0x14</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mh">0xc008</span><span class="p">]</span>
+</pre></div>
+
+
+<p>记住PC（r15）指向的是前方第二条指令的地址，此处即<code>0xbff4</code>。</p>
+<p>文件偏移<code>0xc008</code>位于哪个section呢？我们看看</p>
+<div class="highlight"><pre><span class="nv">$ </span>otool -l a.out|grep c008 -B3 -A8
+Section
+  sectname __objc_selrefs
+   segname __DATA
+      addr 0x0000c008
+      size 0x00000004
+    offset 32776
+     align 2^2 <span class="o">(</span>4<span class="o">)</span>
+    reloff 0
+    nreloc 0
+     flags 0x10000005
+ reserved1 0
+ reserved2 0
+</pre></div>
+
+
+<p>section __objc_selrefs位于__DATA，大小仅为4个字节，正是我们要找的[r1]，看看它存了什么：</p>
+<div class="highlight"><pre><span class="nv">$ </span>otool -s __DATA __objc_selrefs a.out
+a.out:
+Contents of <span class="o">(</span>__DATA,__objc_selrefs<span class="o">)</span> section
+0000c008    0000bffa
+</pre></div>
+
+
+<p>0xbffa指向的不就是objc_selector吗？看看属于哪个section:</p>
+<div class="highlight"><pre><span class="nv">$ </span>otool -l a.out |grep bffa -B 3
+Section
+  sectname __objc_methname
+   segname __TEXT
+      addr 0x0000bffa
+</pre></div>
+
+
+<p>居然是位于__TEXT里的一个section，瞅瞅吧：</p>
+<div class="highlight"><pre><span class="nv">$ </span>otool -s __TEXT __objc_methname a.out
+a.out:
+Contents of <span class="o">(</span>__TEXT,__objc_methname<span class="o">)</span> section
+0000bffa    3a6f6f66 00000000
+</pre></div>
+
+
+<p>这里存的不就是字符串"foo:"吗？有答案了：</p>
+<div class="highlight"><pre><span class="k">struct</span> <span class="n">objc_selector</span> <span class="p">{</span>
+    <span class="kt">char</span>  <span class="n">sel</span><span class="p">[];</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>验证一下吧：</p>
+<div class="highlight"><pre><span class="cp">#import &lt;Foundation/Foundation.h&gt;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">SEL</span> <span class="n">sel</span> <span class="o">=</span> <span class="k">@selector</span><span class="p">(</span><span class="n">foo</span><span class="o">:</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">sel</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>编译运行：</p>
+<div class="highlight"><pre><span class="nv">$ </span>clang test.m
+test.m:4:25: warning: cast of <span class="nb">type</span> <span class="s1">&#39;SEL&#39;</span> to <span class="s1">&#39;char *&#39;</span> is deprecated; use
+      sel_getName instead <span class="o">[</span>-Wcast-of-sel-type<span class="o">]</span>
+        <span class="nb">printf</span><span class="o">(</span><span class="s2">&quot;%s\n&quot;</span>, <span class="o">(</span>char *<span class="o">)</span>sel<span class="o">)</span>;
+                               ^~~
+1 warning generated.
+<span class="nv">$ </span>./a.out
+foo:
+</pre></div>
+
+
+<p>完！</p>                </article>
+<p class="paginator">
+    Page 1 / 1
+</p>
+            </aside><!-- /#featured -->
+            </ol><!-- /#posts-list -->
+            </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="http://www.singuloid.com/">泰一奇点</a></li>
+                            <li><a href="http://www.adtime.com/">AdTime</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

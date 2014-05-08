@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+        <meta charset="utf-8" />
+        <title>插入排序和Shell排序</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Singuloid Research（泰一奇点研究院） </a></h1>
+                <nav><ul>
+                    <li><a href="/pages/gong-zuo-ji-hui.html">工作机会</a></li>
+                    <li class="active"><a href="/category/algorithm.html">Algorithm</a></li>
+                    <li><a href="/category/obj-c.html">Obj-C</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/cha-ru-pai-xu-he-shellpai-xu.html" rel="bookmark"
+           title="Permalink to 插入排序和Shell排序">插入排序和Shell排序</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-04-15T10:20:00">
+                二 15 四月 2014
+        </abbr>
+
+        <address class="vcard author">
+                By <a class="url fn" href="/author/rong-chen.html">Rong Chen</a>
+        </address>
+<p>In <a href="/category/algorithm.html">Algorithm</a>. </p>
+<p>tags: <a href="/tag/sort.html">sort</a><a href="/tag/shell.html">shell</a><a href="/tag/insertion.html">insertion</a></p>
+</footer><!-- /.post-info -->      <p>插入排序的算法在打扑克牌时经常使用，算法比较简单，但是它和冒泡法一样，涉及相邻元素的交换，我们在评价算法效率时往往只看到循环，而忽略循环里的内容，今天这篇文章就说这个。</p>
+<p>插入排序的算法如下：</p>
+<div class="highlight"><pre><span class="kt">void</span> <span class="nf">insertion_sort</span><span class="p">(</span><span class="kt">int</span> <span class="n">b</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span> <span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span> <span class="n">j</span> <span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">exch</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>试想如果数组中最后一个元素就是最小值，那么它要移动n-1次才能到达正确的位置。</p>
+<p>Shell排序是基于插入排序开发出来的，名字来源于作者，就是为了解决插入排序中类似上述情况中移动次数过多的问题，算法比插入排序复杂多了，代码如下：</p>
+<div class="highlight"><pre><span class="kt">void</span> <span class="nf">shell_sort</span><span class="p">(</span><span class="kt">int</span> <span class="n">b</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">h</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span> <span class="n">h</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">h</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">h</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span> <span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="n">h</span> <span class="o">&amp;&amp;</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="n">h</span><span class="p">];</span> <span class="n">j</span> <span class="o">-=</span> <span class="n">h</span><span class="p">)</span>
+          <span class="n">exch</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="n">h</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="n">h</span> <span class="o">/=</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>可以看到，Shell排序经过了多次插入排序，但是并不是对相邻元素进行排序，它排序的元素之间索引间隔为h，最终h会变成1，这时就变成了纯粹的插入排序，即1-sort。</p>
+<p>写到这里可以看出，Shell排序比插入排序要对待排序数组进行多次处理，最后一次才是真正的1-sort插入排序，即才等价于insertion_sort的代码。前面处理的目的只是将数组进行笼统的排序，就算最小值位于数组末端也没有问题，通过h-sort跳跃式地移动到数组前端。</p>
+<p>比较一下上面两段代码的效率吧：</p>
+<div class="highlight"><pre><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">c</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">50000</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span> <span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mi">10000</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">xxxx_sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>结果如下：</p>
+<div class="highlight"><pre><span class="n">time</span> <span class="n">insertion_sort</span>
+<span class="n">real</span>    <span class="mi">0</span><span class="n">m4</span><span class="mf">.991</span><span class="n">s</span>
+<span class="n">user</span>    <span class="mi">0</span><span class="n">m4</span><span class="mf">.986</span><span class="n">s</span>
+<span class="n">sys</span> <span class="mi">0</span><span class="n">m0</span><span class="mf">.004</span><span class="n">s</span>
+</pre></div>
+
+
+<p>而：</p>
+<div class="highlight"><pre><span class="n">time</span> <span class="n">shell_sort</span>
+<span class="n">real</span>    <span class="mi">0</span><span class="n">m0</span><span class="mf">.104</span><span class="n">s</span>
+<span class="n">user</span>    <span class="mi">0</span><span class="n">m0</span><span class="mf">.035</span><span class="n">s</span>
+<span class="n">sys</span> <span class="mi">0</span><span class="n">m0</span><span class="mf">.004</span><span class="n">s</span>
+</pre></div>
+
+
+<p>50倍！！</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="http://www.singuloid.com/">泰一奇点</a></li>
+                            <li><a href="http://www.adtime.com/">AdTime</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
